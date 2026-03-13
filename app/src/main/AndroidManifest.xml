@@ -30,10 +30,12 @@
             android:name=".ui.auth.RegisterActivity"
             android:exported="false" />
 
-        <!-- MainActivity (keep it, we will use it for Dashboard later) -->
+        <!-- Update MainActivity entry to: -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
 
     </application>
 

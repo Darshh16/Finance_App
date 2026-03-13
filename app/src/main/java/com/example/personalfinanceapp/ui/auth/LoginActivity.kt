@@ -53,7 +53,9 @@ class LoginActivity : AppCompatActivity() {
                 sessionManager.saveSession(user.id, user.name)
                 Toast.makeText(this, "Welcome back ${user.name}!", Toast.LENGTH_SHORT).show()
                 // TODO: Navigate to Dashboard in Step 4
-                Toast.makeText(this, "Login successful! Dashboard coming in Step 4", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, com.example.personalfinanceapp.MainActivity::class.java))
+                finish()
+
             }
             result.onFailure { error ->
                 Toast.makeText(this, error.message ?: "Login failed", Toast.LENGTH_SHORT).show()

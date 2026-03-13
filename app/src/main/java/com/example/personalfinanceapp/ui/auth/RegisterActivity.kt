@@ -59,7 +59,9 @@ class RegisterActivity : AppCompatActivity() {
             showLoading(false)
             result.onSuccess { user ->
                 sessionManager.saveSession(user.id, user.name)
-                Toast.makeText(this, "Account created! Welcome ${user.name}", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, com.example.personalfinanceapp.MainActivity::class.java))
+                finish()
+
                 // TODO: Navigate to Dashboard in Step 4
                 // For now, go to Login
                 startActivity(Intent(this, LoginActivity::class.java))

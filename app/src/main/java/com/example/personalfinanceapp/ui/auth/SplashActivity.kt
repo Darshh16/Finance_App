@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.personalfinanceapp.MainActivity
 import com.example.personalfinanceapp.databinding.ActivitySplashBinding
 import com.example.personalfinanceapp.utils.SessionManager
 import kotlinx.coroutines.delay
@@ -18,23 +19,17 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         sessionManager = SessionManager(this)
 
-        // Wait 2 seconds then navigate
         lifecycleScope.launch {
             delay(2000)
             if (sessionManager.isLoggedIn()) {
-                // TODO: Go to Dashboard (we build this in Step 4)
-                goToLogin() // for now, go to login
+                // User already logged in — go straight to Dashboard
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             } else {
-                goToLogin()
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
             }
+            finish()
         }
-    }
-
-    private fun goToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish() // remove splash from back stack
     }
 }
