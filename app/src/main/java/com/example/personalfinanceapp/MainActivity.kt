@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.personalfinanceapp.databinding.ActivityMainBinding
+import com.example.personalfinanceapp.ui.budget.BudgetFragment
 import com.example.personalfinanceapp.ui.dashboard.DashboardFragment
 import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
@@ -18,36 +19,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Start on dashboard
         loadFragment(DashboardFragment())
         binding.bottomNavigation.selectedItemId = R.id.navigation_dashboard
 
-        // FAB — open Add Transaction screen
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
 
-        // Bottom navigation
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_dashboard -> {
-                    loadFragment(DashboardFragment())
-                    true
-                }
-                R.id.navigation_transactions -> {
-                    loadFragment(TransactionsFragment())
-                    true
-                }
-                R.id.navigation_budget -> {
-                    // Placeholder — will build in Step 7
-                    loadFragment(DashboardFragment())
-                    true
-                }
-                R.id.navigation_goals -> {
-                    // Placeholder — will build in Step 8
-                    loadFragment(DashboardFragment())
-                    true
-                }
+                R.id.navigation_dashboard -> { loadFragment(DashboardFragment()); true }
+                R.id.navigation_transactions -> { loadFragment(TransactionsFragment()); true }
+                R.id.navigation_budget -> { loadFragment(BudgetFragment()); true }
+                R.id.navigation_goals -> { loadFragment(DashboardFragment()); true }
                 else -> false
             }
         }
