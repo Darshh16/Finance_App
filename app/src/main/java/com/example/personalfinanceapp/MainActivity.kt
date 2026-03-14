@@ -1,10 +1,12 @@
 package com.example.personalfinanceapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.personalfinanceapp.databinding.ActivityMainBinding
 import com.example.personalfinanceapp.ui.dashboard.DashboardFragment
+import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,16 +17,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Load dashboard as the first screen
         loadFragment(DashboardFragment())
 
-        // Handle bottom navigation taps
+        // FAB opens Add Transaction screen
+        binding.fabAdd.setOnClickListener {
+            startActivity(Intent(this, AddTransactionActivity::class.java))
+        }
+
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_dashboard -> { loadFragment(DashboardFragment()); true }
-                R.id.navigation_transactions -> { loadFragment(DashboardFragment()); true } // placeholder
-                R.id.navigation_budget -> { loadFragment(DashboardFragment()); true }      // placeholder
-                R.id.navigation_goals -> { loadFragment(DashboardFragment()); true }       // placeholder
+                R.id.navigation_transactions -> { loadFragment(DashboardFragment()); true }
+                R.id.navigation_budget -> { loadFragment(DashboardFragment()); true }
+                R.id.navigation_goals -> { loadFragment(DashboardFragment()); true }
                 else -> false
             }
         }

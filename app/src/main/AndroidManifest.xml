@@ -20,6 +20,13 @@
             </intent-filter>
         </activity>
 
+        <!-- Add this inside <application> tag in AndroidManifest.xml -->
+        <activity
+            android:name=".ui.transaction.AddTransactionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+
         <!-- Login Screen -->
         <activity
             android:name=".ui.auth.LoginActivity"
