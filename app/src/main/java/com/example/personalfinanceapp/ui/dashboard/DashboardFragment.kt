@@ -1,5 +1,6 @@
 package com.example.personalfinanceapp.ui.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.personalfinanceapp.databinding.FragmentDashboardBinding
+import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionAdapter
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.DashboardViewModel
+import com.example.personalfinanceapp.viewmodel.TransactionViewModel
 import java.util.Calendar
 
 class DashboardFragment : Fragment() {
@@ -19,10 +22,15 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private val viewModel: DashboardViewModel by viewModels()
+    private val transactionViewModel: TransactionViewModel by viewModels()
     private lateinit var sessionManager: SessionManager
     private lateinit var adapter: TransactionAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -33,13 +41,20 @@ class DashboardFragment : Fragment() {
 
         setupRecyclerView()
         setupGreeting()
+        setupSeeAll()
         loadData()
     }
 
     private fun setupRecyclerView() {
-        adapter = TransactionAdapter { transaction ->
-            Toast.makeText(requireContext(), "Tapped: ${transaction.category}", Toast.LENGTH_SHORT).show()
-        }
+        adapter = TransactionAdapter(
+            onItemClick = { transaction ->
+                Toast.makeText(requireContext(), "${transaction.category}", Toast.LENGTH_SHORT).show()
+            },
+            onDeleteClick = { transaction ->
+                transactionViewModel.deleteTransaction(transaction)
+                Toast.makeText(requireContext(), "Deleted", Toast.LENGTH_SHORT).show()
+            }
+        )
         binding.rvTransactions.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTransactions.adapter = adapter
     }
@@ -55,23 +70,29 @@ class DashboardFragment : Fragment() {
         binding.tvUserName.text = sessionManager.getUserName()
     }
 
+    private fun setupSeeAll() {
+        binding.tvSeeAll.setOnClickListener {
+            // Switch bottom nav to Transactions tab
+            requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
+                com.example.personalfinanceapp.R.id.bottom_navigation
+            ).selectedItemId = com.example.personalfinanceapp.R.id.navigation_transactions
+        }
+    }
+
     private fun loadData() {
         val userId = sessionManager.getUserId()
         viewModel.loadData(userId)
 
-        // Observe income
         viewModel.totalIncome.observe(viewLifecycleOwner) { income ->
-            binding.tvIncome.text = "₹${ String.format("%.2f", income) }"
+            binding.tvIncome.text = "₹${String.format("%.2f", income)}"
             updateBalance()
         }
 
-        // Observe expense
         viewModel.totalExpense.observe(viewLifecycleOwner) { expense ->
-            binding.tvExpense.text = "₹${ String.format("%.2f", expense) }"
+            binding.tvExpense.text = "₹${String.format("%.2f", expense)}"
             updateBalance()
         }
 
-        // Observe transactions list
         viewModel.recentTransactions.observe(viewLifecycleOwner) { transactions ->
             if (transactions.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
@@ -79,7 +100,7 @@ class DashboardFragment : Fragment() {
             } else {
                 binding.tvEmpty.visibility = View.GONE
                 binding.rvTransactions.visibility = View.VISIBLE
-                adapter.submitList(transactions.take(10)) // show last 10
+                adapter.submitList(transactions.take(10))
             }
         }
     }
@@ -88,7 +109,7 @@ class DashboardFragment : Fragment() {
         val income = viewModel.totalIncome.value ?: 0.0
         val expense = viewModel.totalExpense.value ?: 0.0
         val balance = viewModel.getBalance(income, expense)
-        binding.tvBalance.text = "₹${ String.format("%.2f", balance) }"
+        binding.tvBalance.text = "₹${String.format("%.2f", balance)}"
         binding.tvBalance.setTextColor(
             if (balance >= 0) android.graphics.Color.parseColor("#1A1A1A")
             else android.graphics.Color.parseColor("#C62828")

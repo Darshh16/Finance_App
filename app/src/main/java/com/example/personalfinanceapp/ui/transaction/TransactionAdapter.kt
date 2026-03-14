@@ -2,6 +2,7 @@ package com.example.personalfinanceapp.ui.transaction
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +12,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) :
-    ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(DiffCallback()) {
+class TransactionAdapter(
+    private val onItemClick: (Transaction) -> Unit,
+    private val onDeleteClick: (Transaction) -> Unit
+) : ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
-        val binding = ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemTransactionBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
         return TransactionViewHolder(binding)
     }
 
@@ -31,24 +36,33 @@ class TransactionAdapter(private val onItemClick: (Transaction) -> Unit) :
             binding.tvDescription.text = transaction.description.ifEmpty { transaction.type }
             binding.tvCategoryIcon.text = getCategoryEmoji(transaction.category)
 
-            // Format amount with + or - sign and color
             if (transaction.type == "INCOME") {
-                binding.tvAmount.text = "+ ₹${ String.format("%.2f", transaction.amount) }"
+                binding.tvAmount.text = "+ ₹${String.format("%.2f", transaction.amount)}"
                 binding.tvAmount.setTextColor(android.graphics.Color.parseColor("#2E7D32"))
             } else {
-                binding.tvAmount.text = "- ₹${ String.format("%.2f", transaction.amount) }"
+                binding.tvAmount.text = "- ₹${String.format("%.2f", transaction.amount)}"
                 binding.tvAmount.setTextColor(android.graphics.Color.parseColor("#C62828"))
             }
 
-            // Format date
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             binding.tvDate.text = sdf.format(Date(transaction.date))
 
+            // Short tap — item click
             binding.root.setOnClickListener { onItemClick(transaction) }
+
+            // Long press — show delete confirmation dialog
+            binding.root.setOnLongClickListener {
+                AlertDialog.Builder(binding.root.context)
+                    .setTitle("Delete Transaction")
+                    .setMessage("Are you sure you want to delete this ${transaction.category} transaction of ₹${String.format("%.2f", transaction.amount)}?")
+                    .setPositiveButton("Delete") { _, _ -> onDeleteClick(transaction) }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+                true
+            }
         }
     }
 
-    // Returns an emoji for each category
     private fun getCategoryEmoji(category: String): String = when (category) {
         "Food" -> "🍔"
         "Transportation" -> "🚗"
