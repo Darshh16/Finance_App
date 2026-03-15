@@ -24,14 +24,7 @@
             app:tabTextColor="#888888"
             app:tabMode="fixed"
             app:tabGravity="fill">
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EXPENSE" />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="INCOME" />
+
         </com.google.android.material.tabs.TabLayout>
 
         <!-- Amount Input -->

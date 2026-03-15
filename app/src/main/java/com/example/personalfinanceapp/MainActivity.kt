@@ -28,18 +28,32 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_dashboard -> { loadFragment(DashboardFragment()); true }
-                R.id.navigation_transactions -> { loadFragment(TransactionsFragment()); true }
-                R.id.navigation_budget -> { loadFragment(BudgetFragment()); true }
-                R.id.navigation_goals -> { loadFragment(DashboardFragment()); true }
+                R.id.navigation_dashboard -> {
+                    binding.fabAdd.show()
+                    loadFragment(DashboardFragment()); true
+                }
+                R.id.navigation_transactions -> {
+                    binding.fabAdd.show()
+                    loadFragment(TransactionsFragment()); true
+                }
+                R.id.navigation_budget -> {
+                    binding.fabAdd.hide()
+                    loadFragment(BudgetFragment()); true
+                }
+                R.id.navigation_goals -> {
+                    binding.fabAdd.hide()
+                    loadFragment(DashboardFragment()); true
+                }
                 else -> false
             }
         }
-    }
+
+    }  // ← closes onCreate
 
     fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment, fragment)
             .commit()
     }
-}
+
+}  // ← closes class

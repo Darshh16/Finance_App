@@ -49,6 +49,14 @@ class AddTransactionActivity : AppCompatActivity() {
     }
 
     private fun setupTabs() {
+        // Add tabs manually in code — more reliable than XML TabItems
+        binding.tabTransactionType.addTab(
+            binding.tabTransactionType.newTab().setText("EXPENSE")
+        )
+        binding.tabTransactionType.addTab(
+            binding.tabTransactionType.newTab().setText("INCOME")
+        )
+
         binding.tabTransactionType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 selectedType = if (tab?.position == 0) "EXPENSE" else "INCOME"
