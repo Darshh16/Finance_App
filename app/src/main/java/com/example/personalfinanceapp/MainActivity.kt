@@ -9,6 +9,7 @@ import com.example.personalfinanceapp.databinding.ActivityMainBinding
 import com.example.personalfinanceapp.ui.budget.BudgetFragment
 import com.example.personalfinanceapp.ui.dashboard.DashboardFragment
 import com.example.personalfinanceapp.ui.goals.GoalsFragment
+import com.example.personalfinanceapp.ui.reports.ReportsFragment
 import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
 
@@ -17,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Force light mode — ignore phone dark mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_goals -> {
                     binding.fabAdd.hide()
                     loadFragment(GoalsFragment()); true
+                }
+                R.id.navigation_reports -> {
+                    binding.fabAdd.hide()
+                    loadFragment(ReportsFragment()); true
                 }
                 else -> false
             }
