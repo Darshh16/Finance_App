@@ -3,10 +3,12 @@ package com.example.personalfinanceapp
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.example.personalfinanceapp.databinding.ActivityMainBinding
 import com.example.personalfinanceapp.ui.budget.BudgetFragment
 import com.example.personalfinanceapp.ui.dashboard.DashboardFragment
+import com.example.personalfinanceapp.ui.goals.GoalsFragment
 import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
 
@@ -15,14 +17,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Force light mode — ignore phone dark mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Force light mode — ignore phone dark mode
-        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
-            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-        )
 
         loadFragment(DashboardFragment())
         binding.bottomNavigation.selectedItemId = R.id.navigation_dashboard
@@ -47,18 +46,16 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_goals -> {
                     binding.fabAdd.hide()
-                    loadFragment(DashboardFragment()); true
+                    loadFragment(GoalsFragment()); true
                 }
                 else -> false
             }
         }
-
-    }  // ← closes onCreate
+    }
 
     fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment, fragment)
             .commit()
     }
-
-}  // ← closes class
+}
