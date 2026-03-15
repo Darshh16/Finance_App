@@ -21,14 +21,11 @@ class TransactionsFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
     private lateinit var adapter: TransactionAdapter
 
-    // Keep full list so we can filter locally
+    // Hold full list in memory so chip filter works instantly
     private var allTransactions: List<Transaction> = emptyList()
+    private var currentFilter = "ALL"
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentTransactionsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,7 +33,6 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sessionManager = SessionManager(requireContext())
-
         setupRecyclerView()
         setupFilterChips()
         loadTransactions()
@@ -45,9 +41,10 @@ class TransactionsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = TransactionAdapter(
             onItemClick = { transaction ->
+                val sign = if (transaction.type == "INCOME") "+" else "-"
                 Toast.makeText(
                     requireContext(),
-                    "${transaction.category}: ₹${String.format("%.2f", transaction.amount)}",
+                    "${transaction.category}: $sign₹${String.format("%.2f", transaction.amount)}",
                     Toast.LENGTH_SHORT
                 ).show()
             },
@@ -61,28 +58,40 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun setupFilterChips() {
-        binding.chipAll.setOnClickListener { applyFilter("ALL") }
-        binding.chipIncome.setOnClickListener { applyFilter("INCOME") }
-        binding.chipExpense.setOnClickListener { applyFilter("EXPENSE") }
+        binding.chipAll.setOnCheckedChangeListener { _, checked ->
+            if (checked) { currentFilter = "ALL"; applyFilter() }
+        }
+        binding.chipIncome.setOnCheckedChangeListener { _, checked ->
+            if (checked) { currentFilter = "INCOME"; applyFilter() }
+        }
+        binding.chipExpense.setOnCheckedChangeListener { _, checked ->
+            if (checked) { currentFilter = "EXPENSE"; applyFilter() }
+        }
     }
 
     private fun loadTransactions() {
         val userId = sessionManager.getUserId()
         viewModel.getAllTransactions(userId).observe(viewLifecycleOwner) { transactions ->
             allTransactions = transactions
-            applyFilter(getSelectedFilter())
+            applyFilter()
         }
     }
 
-    private fun applyFilter(filter: String) {
-        val filtered = when (filter) {
-            "INCOME" -> allTransactions.filter { it.type == "INCOME" }
+    private fun applyFilter() {
+        val filtered = when (currentFilter) {
+            "INCOME"  -> allTransactions.filter { it.type == "INCOME" }
             "EXPENSE" -> allTransactions.filter { it.type == "EXPENSE" }
-            else -> allTransactions
+            else      -> allTransactions
         }
 
-        adapter.submitList(filtered)
-        binding.tvCount.text = "${filtered.size} transaction${if (filtered.size != 1) "s" else ""}"
+        adapter.submitList(filtered.toMutableList())
+
+        val label = when (currentFilter) {
+            "INCOME"  -> "${filtered.size} income transaction${if (filtered.size != 1) "s" else ""}"
+            "EXPENSE" -> "${filtered.size} expense transaction${if (filtered.size != 1) "s" else ""}"
+            else      -> "${filtered.size} transaction${if (filtered.size != 1) "s" else ""}"
+        }
+        binding.tvCount.text = label
 
         if (filtered.isEmpty()) {
             binding.layoutEmpty.visibility = View.VISIBLE
@@ -90,14 +99,6 @@ class TransactionsFragment : Fragment() {
         } else {
             binding.layoutEmpty.visibility = View.GONE
             binding.rvTransactions.visibility = View.VISIBLE
-        }
-    }
-
-    private fun getSelectedFilter(): String {
-        return when {
-            binding.chipIncome.isChecked -> "INCOME"
-            binding.chipExpense.isChecked -> "EXPENSE"
-            else -> "ALL"
         }
     }
 

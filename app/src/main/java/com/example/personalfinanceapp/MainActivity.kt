@@ -19,6 +19,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Force light mode — ignore phone dark mode
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        )
+
         loadFragment(DashboardFragment())
         binding.bottomNavigation.selectedItemId = R.id.navigation_dashboard
 

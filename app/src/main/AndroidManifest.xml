@@ -9,7 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PersonalFinanceApp">
 
-        <!-- Splash Screen — this is the FIRST screen that opens -->
+        <!-- Force light mode always — ignores phone dark mode setting -->
+        <meta-data
+            android:name="android.app.ui.mode"
+            android:value="day"/>
+
         <activity
             android:name=".ui.auth.SplashActivity"
             android:exported="true"
@@ -20,29 +24,26 @@
             </intent-filter>
         </activity>
 
-        <!-- Add this inside <application> tag in AndroidManifest.xml -->
-        <activity
-            android:name=".ui.transaction.AddTransactionActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
-
-        <!-- Login Screen -->
         <activity
             android:name=".ui.auth.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PersonalFinanceApp.NoActionBar"/>
 
-        <!-- Register Screen -->
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PersonalFinanceApp.NoActionBar"/>
 
-        <!-- Update MainActivity entry to: -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/Theme.PersonalFinanceApp.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:name=".ui.transaction.AddTransactionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 

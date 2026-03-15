@@ -12,7 +12,6 @@ import com.example.personalfinanceapp.data.model.TransactionCategory
 import com.example.personalfinanceapp.databinding.ActivityAddTransactionBinding
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.TransactionViewModel
-import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -23,7 +22,7 @@ class AddTransactionActivity : AppCompatActivity() {
     private lateinit var sessionManager: SessionManager
     private val viewModel: TransactionViewModel by viewModels()
 
-    private var selectedType = "EXPENSE"  // default tab
+    private var selectedType = "EXPENSE"
     private var selectedDateMillis = System.currentTimeMillis()
     private val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
@@ -31,44 +30,56 @@ class AddTransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddTransactionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         sessionManager = SessionManager(this)
 
-        // Show back button in toolbar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Add Transaction"
 
-        setupTabs()
-        setupCategorySpinner()
+        // Set default state — EXPENSE selected
+        setExpenseSelected()
+
+        binding.btnExpense.setOnClickListener {
+            selectedType = "EXPENSE"
+            setExpenseSelected()
+            updateCategorySpinner()
+        }
+
+        binding.btnIncome.setOnClickListener {
+            selectedType = "INCOME"
+            setIncomeSelected()
+            updateCategorySpinner()
+        }
+
+        updateCategorySpinner()
         setupDatePicker()
         setupSaveButton()
         observeViewModel()
 
-        // Set today's date as default
         binding.etDate.setText(dateFormat.format(selectedDateMillis))
     }
 
-    private fun setupTabs() {
-        // Add tabs manually in code — more reliable than XML TabItems
-        binding.tabTransactionType.addTab(
-            binding.tabTransactionType.newTab().setText("EXPENSE")
-        )
-        binding.tabTransactionType.addTab(
-            binding.tabTransactionType.newTab().setText("INCOME")
-        )
-
-        binding.tabTransactionType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                selectedType = if (tab?.position == 0) "EXPENSE" else "INCOME"
-                updateCategorySpinner()
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+    // Red active button for EXPENSE
+    private fun setExpenseSelected() {
+        binding.btnExpense.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(
+                android.graphics.Color.parseColor("#C62828")
+            )
+        binding.btnIncome.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(
+                android.graphics.Color.parseColor("#CCCCCC")
+            )
     }
 
-    private fun setupCategorySpinner() {
-        updateCategorySpinner()
+    // Green active button for INCOME
+    private fun setIncomeSelected() {
+        binding.btnIncome.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(
+                android.graphics.Color.parseColor("#2E7D32")
+            )
+        binding.btnExpense.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(
+                android.graphics.Color.parseColor("#CCCCCC")
+            )
     }
 
     private fun updateCategorySpinner() {
@@ -77,7 +88,11 @@ class AddTransactionActivity : AppCompatActivity() {
         else
             TransactionCategory.incomeCategories
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            categories
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
     }
@@ -105,7 +120,6 @@ class AddTransactionActivity : AppCompatActivity() {
             val description = binding.etDescription.text.toString().trim()
             val category = binding.spinnerCategory.selectedItem?.toString() ?: ""
 
-            // Validate
             if (amountStr.isEmpty()) {
                 binding.tilAmount.error = "Please enter an amount"
                 return@setOnClickListener
@@ -137,15 +151,15 @@ class AddTransactionActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.GONE
             binding.btnSave.isEnabled = true
             if (success) {
-                Toast.makeText(this, "Transaction saved!", Toast.LENGTH_SHORT).show()
-                finish() // go back to dashboard
+                val msg = if (selectedType == "INCOME") "Income added! ✓" else "Expense added! ✓"
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                finish()
             } else {
                 Toast.makeText(this, "Failed to save. Try again.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // Handle back button in toolbar
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true

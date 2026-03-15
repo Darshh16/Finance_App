@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F7FA">
@@ -12,22 +11,36 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Income / Expense Toggle -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabTransactionType"
+        <!-- EXPENSE / INCOME Toggle Buttons -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="20dp"
-            app:tabBackground="@android:color/white"
-            app:tabIndicatorColor="#1A73E8"
-            app:tabSelectedTextColor="#1A73E8"
-            app:tabTextColor="#888888"
-            app:tabMode="fixed"
-            app:tabGravity="fill">
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
 
-        </com.google.android.material.tabs.TabLayout>
+            <Button
+                android:id="@+id/btnExpense"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="EXPENSE"
+                android:textSize="14sp"
+                android:backgroundTint="#C62828"
+                android:layout_marginEnd="4dp"/>
 
-        <!-- Amount Input -->
+            <Button
+                android:id="@+id/btnIncome"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="INCOME"
+                android:textSize="14sp"
+                android:backgroundTint="#CCCCCC"
+                android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
+
+        <!-- Amount -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilAmount"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -43,7 +56,7 @@
                 android:textSize="18sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Category Spinner -->
+        <!-- Category label -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +65,7 @@
             android:textSize="13sp"
             android:layout_marginBottom="6dp"/>
 
+        <!-- Category Spinner -->
         <Spinner
             android:id="@+id/spinnerCategory"
             android:layout_width="match_parent"
@@ -60,7 +74,7 @@
             android:padding="12dp"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Date Picker -->
+        <!-- Date -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDate"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -78,7 +92,7 @@
                 android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description Input -->
+        <!-- Description -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDescription"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
