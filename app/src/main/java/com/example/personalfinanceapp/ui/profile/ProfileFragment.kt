@@ -55,16 +55,19 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupDarkModeSwitch() {
-        // Set switch state to match saved preference
+        // Set switch without triggering the listener
         binding.switchDarkMode.isChecked = sessionManager.isDarkMode()
 
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             sessionManager.setDarkMode(isChecked)
+            // Recreate activity safely AFTER saving preference
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+            // Restart MainActivity cleanly so nothing crashes
+            requireActivity().recreate()
         }
     }
 

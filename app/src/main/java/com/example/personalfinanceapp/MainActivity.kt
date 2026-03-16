@@ -12,6 +12,7 @@ import com.example.personalfinanceapp.ui.profile.ProfileFragment
 import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
 import com.example.personalfinanceapp.utils.SessionManager
+import com.example.personalfinanceapp.ui.goals.GoalsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_goals -> {
                     binding.fabAdd.hide()
-                    loadFragment(DashboardFragment()); true
+                    loadFragment(GoalsFragment()); true
                 }
                 R.id.navigation_profile -> {
                     binding.fabAdd.hide()
