@@ -8,17 +8,24 @@ import androidx.fragment.app.Fragment
 import com.example.personalfinanceapp.databinding.ActivityMainBinding
 import com.example.personalfinanceapp.ui.budget.BudgetFragment
 import com.example.personalfinanceapp.ui.dashboard.DashboardFragment
-import com.example.personalfinanceapp.ui.goals.GoalsFragment
-import com.example.personalfinanceapp.ui.reports.ReportsFragment
+import com.example.personalfinanceapp.ui.profile.ProfileFragment
 import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
+import com.example.personalfinanceapp.utils.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        // Apply saved dark mode preference BEFORE setContentView
+        val sessionManager = SessionManager(this)
+        if (sessionManager.isDarkMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -26,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         loadFragment(DashboardFragment())
         binding.bottomNavigation.selectedItemId = R.id.navigation_dashboard
 
+        // FAB — open Add Transaction screen
         binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, AddTransactionActivity::class.java))
         }
@@ -46,11 +54,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_goals -> {
                     binding.fabAdd.hide()
-                    loadFragment(GoalsFragment()); true
+                    loadFragment(DashboardFragment()); true
                 }
-                R.id.navigation_reports -> {
+                R.id.navigation_profile -> {
                     binding.fabAdd.hide()
-                    loadFragment(ReportsFragment()); true
+                    loadFragment(ProfileFragment()); true
                 }
                 else -> false
             }

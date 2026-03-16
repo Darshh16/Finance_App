@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import com.example.personalfinanceapp.MainActivity
 import com.example.personalfinanceapp.databinding.ActivityLoginBinding
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.AuthViewModel
@@ -18,10 +20,18 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Apply dark mode preference
+        sessionManager = SessionManager(this)
+        if (sessionManager.isDarkMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sessionManager = SessionManager(this)
         setupClickListeners()
         observeViewModel()
     }
@@ -30,16 +40,13 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
-
             if (email.isEmpty()) { binding.tilEmail.error = "Enter your email"; return@setOnClickListener }
             if (password.isEmpty()) { binding.tilPassword.error = "Enter your password"; return@setOnClickListener }
-
             binding.tilEmail.error = null
             binding.tilPassword.error = null
             showLoading(true)
             viewModel.login(email, password)
         }
-
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
@@ -50,12 +57,11 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginResult.observe(this) { result ->
             showLoading(false)
             result.onSuccess { user ->
-                sessionManager.saveSession(user.id, user.name)
+                // Save email to session too
+                sessionManager.saveSession(user.id, user.name, user.email)
                 Toast.makeText(this, "Welcome back ${user.name}!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to Dashboard in Step 4
-                startActivity(Intent(this, com.example.personalfinanceapp.MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
-
             }
             result.onFailure { error ->
                 Toast.makeText(this, error.message ?: "Login failed", Toast.LENGTH_SHORT).show()

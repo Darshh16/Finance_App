@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_transactions"
         android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Transactions" />
+        android:title="History" />
 
     <item
         android:id="@+id/navigation_budget"
@@ -18,12 +18,12 @@
 
     <item
         android:id="@+id/navigation_goals"
-        android:icon="@android:drawable/btn_star"
+        android:icon="@android:drawable/star_big_off"
         android:title="Goals" />
 
     <item
-        android:id="@+id/navigation_reports"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="Reports" />
+        android:id="@+id/navigation_profile"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Profile" />
 
 </menu>
