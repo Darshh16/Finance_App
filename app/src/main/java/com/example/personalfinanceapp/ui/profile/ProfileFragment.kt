@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import com.example.personalfinanceapp.databinding.FragmentProfileBinding
 import com.example.personalfinanceapp.ui.auth.LoginActivity
 import com.example.personalfinanceapp.utils.SessionManager
-import com.example.personalfinanceapp.viewmodel.DashboardViewModel
 import com.example.personalfinanceapp.viewmodel.BudgetViewModel
+import com.example.personalfinanceapp.viewmodel.DashboardViewModel
 
 class ProfileFragment : Fragment() {
 
@@ -24,9 +24,7 @@ class ProfileFragment : Fragment() {
     private val budgetViewModel: BudgetViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
@@ -45,29 +43,23 @@ class ProfileFragment : Fragment() {
     private fun setupProfileInfo() {
         val name = sessionManager.getUserName()
         val email = sessionManager.getUserEmail()
-
         binding.tvProfileName.text = name
         binding.tvProfileEmail.text = email.ifEmpty { "No email saved" }
-
-        // Set avatar initials — first letter of name
         val initials = if (name.isNotEmpty()) name[0].uppercaseChar().toString() else "U"
         binding.tvAvatar.text = initials
     }
 
     private fun setupDarkModeSwitch() {
-        // Set switch without triggering the listener
+        binding.switchDarkMode.setOnCheckedChangeListener(null)
         binding.switchDarkMode.isChecked = sessionManager.isDarkMode()
 
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             sessionManager.setDarkMode(isChecked)
-            // Recreate activity safely AFTER saving preference
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            // Restart MainActivity cleanly so nothing crashes
-            requireActivity().recreate()
+            AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            // No recreate needed — configChanges handles it silently
         }
     }
 
@@ -89,19 +81,13 @@ class ProfileFragment : Fragment() {
 
     private fun loadStats() {
         val userId = sessionManager.getUserId()
-
-        // Count total transactions
         dashboardViewModel.loadData(userId)
         dashboardViewModel.recentTransactions.observe(viewLifecycleOwner) { transactions ->
             binding.tvStatTransactions.text = transactions.size.toString()
         }
-
-        // Count budgets
         budgetViewModel.getBudgetsForCurrentMonth(userId).observe(viewLifecycleOwner) { budgets ->
             binding.tvStatBudgets.text = budgets.size.toString()
         }
-
-        // Goals count placeholder
         binding.tvStatGoals.text = "0"
     }
 

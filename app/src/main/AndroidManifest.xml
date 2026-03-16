@@ -37,8 +37,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.PersonalFinanceApp.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:configChanges="uiMode"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.transaction.AddTransactionActivity"

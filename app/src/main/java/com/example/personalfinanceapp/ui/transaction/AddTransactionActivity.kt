@@ -32,8 +32,7 @@ class AddTransactionActivity : AppCompatActivity() {
         setContentView(binding.root)
         sessionManager = SessionManager(this)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Add Transaction"
+
 
         // Set default state — EXPENSE selected
         setExpenseSelected()
