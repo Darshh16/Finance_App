@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="nav_item_color">#888888</color>
+    <!-- Primary Brand Colors -->
+    <color name="navy_primary">#1A237E</color>
+    <color name="navy_dark">#283593</color>
+    <color name="navy_light">#3949AB</color>
+
+    <!-- Gold Accent -->
+    <color name="gold">#FFD700</color>
+    <color name="gold_dark">#FFA000</color>
+
+    <!-- Dark Backgrounds -->
+    <color name="bg_dark">#121228</color>
+    <color name="bg_card">#1C1C3A</color>
+    <color name="bg_card_light">#252550</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0BEC5</color>
+    <color name="text_hint">#546E7A</color>
+
+    <!-- Income / Expense -->
+    <color name="income_green">#00E676</color>
+    <color name="expense_red">#FF5252</color>
+
+    <!-- Nav item color -->
+    <color name="nav_item_color">#B0BEC5</color>
 </resources>

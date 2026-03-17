@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.personalfinanceapp.databinding.FragmentDashboardBinding
-import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionAdapter
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.DashboardViewModel
@@ -26,11 +25,7 @@ class DashboardFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
     private lateinit var adapter: TransactionAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,7 +33,6 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sessionManager = SessionManager(requireContext())
-
         setupRecyclerView()
         setupGreeting()
         setupSeeAll()
@@ -48,7 +42,7 @@ class DashboardFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = TransactionAdapter(
             onItemClick = { transaction ->
-                Toast.makeText(requireContext(), "${transaction.category}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), transaction.category, Toast.LENGTH_SHORT).show()
             },
             onDeleteClick = { transaction ->
                 transactionViewModel.deleteTransaction(transaction)
@@ -61,18 +55,19 @@ class DashboardFragment : Fragment() {
 
     private fun setupGreeting() {
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        val greeting = when {
+        binding.tvGreeting.text = when {
             hour < 12 -> "Good Morning!"
             hour < 17 -> "Good Afternoon!"
             else -> "Good Evening!"
         }
-        binding.tvGreeting.text = greeting
-        binding.tvUserName.text = sessionManager.getUserName()
+        val name = sessionManager.getUserName()
+        binding.tvUserName.text = name
+        // Set avatar initial
+        binding.tvAvatarDash.text = if (name.isNotEmpty()) name[0].uppercaseChar().toString() else "U"
     }
 
     private fun setupSeeAll() {
         binding.tvSeeAll.setOnClickListener {
-            // Switch bottom nav to Transactions tab
             requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(
                 com.example.personalfinanceapp.R.id.bottom_navigation
             ).selectedItemId = com.example.personalfinanceapp.R.id.navigation_transactions
@@ -82,17 +77,14 @@ class DashboardFragment : Fragment() {
     private fun loadData() {
         val userId = sessionManager.getUserId()
         viewModel.loadData(userId)
-
         viewModel.totalIncome.observe(viewLifecycleOwner) { income ->
             binding.tvIncome.text = "₹${String.format("%.2f", income)}"
             updateBalance()
         }
-
         viewModel.totalExpense.observe(viewLifecycleOwner) { expense ->
             binding.tvExpense.text = "₹${String.format("%.2f", expense)}"
             updateBalance()
         }
-
         viewModel.recentTransactions.observe(viewLifecycleOwner) { transactions ->
             if (transactions.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
@@ -111,8 +103,8 @@ class DashboardFragment : Fragment() {
         val balance = viewModel.getBalance(income, expense)
         binding.tvBalance.text = "₹${String.format("%.2f", balance)}"
         binding.tvBalance.setTextColor(
-            if (balance >= 0) android.graphics.Color.parseColor("#1A1A1A")
-            else android.graphics.Color.parseColor("#C62828")
+            if (balance >= 0) android.graphics.Color.parseColor("#FFD700")
+            else android.graphics.Color.parseColor("#FF5252")
         )
     }
 
