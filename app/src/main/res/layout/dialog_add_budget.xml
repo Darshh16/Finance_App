@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/bg_card"
     android:padding="20dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Category"
-        android:textColor="#555555"
+        android:textColor="@color/text_secondary"
         android:textSize="13sp"
         android:layout_marginBottom="6dp"/>
 
@@ -18,7 +19,7 @@
         android:id="@+id/spinnerCategory"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:background="@drawable/spinner_bg"
+        android:background="@drawable/spinner_dark_bg"
         android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
@@ -27,12 +28,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Monthly Limit (₹)">
+        android:hint="Monthly Limit (₹)"
+        app:boxStrokeColor="@color/navy_light"
+        app:hintTextColor="@color/text_secondary"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etBudgetAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal"
+            android:textColor="@color/text_primary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

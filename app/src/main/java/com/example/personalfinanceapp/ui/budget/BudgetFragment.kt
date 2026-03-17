@@ -20,6 +20,7 @@ import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.BudgetViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import com.example.personalfinanceapp.R
 import java.util.Locale
 
 class BudgetFragment : Fragment() {
@@ -95,11 +96,11 @@ class BudgetFragment : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         dialogBinding.spinnerCategory.adapter = adapter
 
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext(), R.style.DarkDialog)
             .setTitle("Set Monthly Budget")
             .setView(dialogBinding.root)
             .setPositiveButton("Save") { _, _ ->
-                val category  = dialogBinding.spinnerCategory.selectedItem?.toString() ?: ""
+                val category = dialogBinding.spinnerCategory.selectedItem?.toString() ?: ""
                 val amountStr = dialogBinding.etBudgetAmount.text.toString().trim()
                 if (amountStr.isEmpty()) {
                     Toast.makeText(requireContext(), "Please enter an amount", Toast.LENGTH_SHORT).show()
@@ -114,6 +115,9 @@ class BudgetFragment : Fragment() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+
+        // Force dark background on dialog
+        dialog.window?.setBackgroundDrawableResource(R.color.bg_card)
     }
 
     private fun observeSaveResult() {

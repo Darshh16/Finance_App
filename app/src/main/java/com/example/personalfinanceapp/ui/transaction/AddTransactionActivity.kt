@@ -12,6 +12,7 @@ import com.example.personalfinanceapp.data.model.TransactionCategory
 import com.example.personalfinanceapp.databinding.ActivityAddTransactionBinding
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.TransactionViewModel
+import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -32,23 +33,7 @@ class AddTransactionActivity : AppCompatActivity() {
         setContentView(binding.root)
         sessionManager = SessionManager(this)
 
-
-
-        // Set default state — EXPENSE selected
-        setExpenseSelected()
-
-        binding.btnExpense.setOnClickListener {
-            selectedType = "EXPENSE"
-            setExpenseSelected()
-            updateCategorySpinner()
-        }
-
-        binding.btnIncome.setOnClickListener {
-            selectedType = "INCOME"
-            setIncomeSelected()
-            updateCategorySpinner()
-        }
-
+        setupTabs()
         updateCategorySpinner()
         setupDatePicker()
         setupSaveButton()
@@ -57,28 +42,22 @@ class AddTransactionActivity : AppCompatActivity() {
         binding.etDate.setText(dateFormat.format(selectedDateMillis))
     }
 
-    // Red active button for EXPENSE
-    private fun setExpenseSelected() {
-        binding.btnExpense.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(
-                android.graphics.Color.parseColor("#C62828")
-            )
-        binding.btnIncome.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(
-                android.graphics.Color.parseColor("#CCCCCC")
-            )
-    }
+    private fun setupTabs() {
+        binding.tabTransactionType.addTab(
+            binding.tabTransactionType.newTab().setText("EXPENSE")
+        )
+        binding.tabTransactionType.addTab(
+            binding.tabTransactionType.newTab().setText("INCOME")
+        )
 
-    // Green active button for INCOME
-    private fun setIncomeSelected() {
-        binding.btnIncome.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(
-                android.graphics.Color.parseColor("#2E7D32")
-            )
-        binding.btnExpense.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(
-                android.graphics.Color.parseColor("#CCCCCC")
-            )
+        binding.tabTransactionType.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                selectedType = if (tab?.position == 0) "EXPENSE" else "INCOME"
+                updateCategorySpinner()
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     private fun updateCategorySpinner() {

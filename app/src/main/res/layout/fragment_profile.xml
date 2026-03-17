@@ -3,40 +3,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Blue header with avatar -->
+        <!-- Navy header with gold avatar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#1A73E8"
+            android:background="@color/navy_primary"
             android:orientation="vertical"
             android:gravity="center"
             android:padding="20dp">
 
-            <!-- Avatar circle with initials -->
-            <TextView
-                android:id="@+id/tvAvatar"
+            <androidx.cardview.widget.CardView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:gravity="center"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="#1A73E8"
-                android:background="@android:color/white"
-                android:text="A"/>
+                app:cardCornerRadius="40dp"
+                app:cardBackgroundColor="@color/gold"
+                app:cardElevation="8dp">
+                <TextView
+                    android:id="@+id/tvAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="U"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/navy_primary"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/tvProfileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="User Name"
-                android:textColor="@android:color/white"
+                android:textColor="@color/text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp"/>
@@ -46,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="user@email.com"
-                android:textColor="#CCffffff"
+                android:textColor="@color/gold"
                 android:textSize="13sp"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
@@ -57,83 +63,27 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
-
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/bg_card">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="16dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvStatTransactions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A73E8"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Transactions"
-                        android:textSize="11sp"
-                        android:textColor="#888888"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvStatTransactions" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/gold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Transactions" android:textSize="11sp" android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-
-                <View android:layout_width="1dp" android:layout_height="40dp" android:background="#EEEEEE"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvStatBudgets"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A73E8"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Budgets"
-                        android:textSize="11sp"
-                        android:textColor="#888888"/>
+                <View android:layout_width="1dp" android:layout_height="40dp" android:background="#2A2A5A"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvStatBudgets" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/gold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Budgets" android:textSize="11sp" android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-
-                <View android:layout_width="1dp" android:layout_height="40dp" android:background="#EEEEEE"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/tvStatGoals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A73E8"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Goals"
-                        android:textSize="11sp"
-                        android:textColor="#888888"/>
+                <View android:layout_width="1dp" android:layout_height="40dp" android:background="#2A2A5A"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center">
+                    <TextView android:id="@+id/tvStatGoals" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/gold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Goals" android:textSize="11sp" android:textColor="@color/text_secondary"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -144,31 +94,29 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
-
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/bg_card">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <!-- Dark Mode Row -->
+                <!-- Dark Mode -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp">
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="🌙  Dark Mode"
                         android:textSize="15sp"
-                        android:textColor="#1A1A1A"/>
-
+                        android:textColor="@color/text_primary"/>
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switchDarkMode"
                         android:layout_width="wrap_content"
@@ -176,32 +124,29 @@
                         android:checked="false"/>
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0"/>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#2A2A5A"/>
 
-                <!-- App Version Row -->
+                <!-- Version -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp">
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="ℹ️  App Version"
                         android:textSize="15sp"
-                        android:textColor="#1A1A1A"/>
-
+                        android:textColor="@color/text_primary"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1.0.0"
                         android:textSize="13sp"
-                        android:textColor="#888888"/>
+                        android:textColor="@color/text_secondary"/>
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -213,10 +158,12 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="40dp"
-            android:text="Logout"
-            android:textSize="16sp"
+            android:text="LOGOUT"
+            android:letterSpacing="0.1"
+            android:textSize="15sp"
+            android:textStyle="bold"
             android:backgroundTint="#C62828"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/text_primary"/>
 
     </LinearLayout>
 </ScrollView>
