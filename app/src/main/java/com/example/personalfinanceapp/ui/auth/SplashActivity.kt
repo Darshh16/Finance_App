@@ -23,11 +23,19 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             delay(2000)
-            if (sessionManager.isLoggedIn()) {
-                // User already logged in — go straight to Dashboard
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            } else {
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            when {
+                // Not logged in — go to Login
+                !sessionManager.isLoggedIn() -> {
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                }
+                // Logged in + PIN enabled — go to PIN screen
+                sessionManager.isPinEnabled() -> {
+                    startActivity(Intent(this@SplashActivity, PinActivity::class.java))
+                }
+                // Logged in + no PIN — go to Dashboard
+                else -> {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                }
             }
             finish()
         }

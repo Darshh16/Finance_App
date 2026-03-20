@@ -72,4 +72,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Biometric authentication
+    implementation("androidx.biometric:biometric:1.1.0")
+
 }

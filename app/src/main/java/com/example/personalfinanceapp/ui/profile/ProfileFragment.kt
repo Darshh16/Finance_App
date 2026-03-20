@@ -36,9 +36,28 @@ class ProfileFragment : Fragment() {
 
         setupProfileInfo()
         setupDarkModeSwitch()
+        setupPinSwitch()
         setupLogout()
         loadStats()
     }
+
+    private fun setupPinSwitch() {
+        binding.switchPin.isChecked = sessionManager.isPinEnabled()
+        binding.switchPin.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Go to PIN setup screen
+                startActivity(Intent(
+                    requireContext(),
+                    com.example.personalfinanceapp.ui.auth.PinActivity::class.java
+                ))
+            } else {
+                // Disable PIN
+                sessionManager.clearPin()
+                Toast.makeText(requireContext(), "PIN Lock disabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     private fun setupProfileInfo() {
         val name = sessionManager.getUserName()
