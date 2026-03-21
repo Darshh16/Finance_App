@@ -15,6 +15,7 @@ import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.viewmodel.DashboardViewModel
 import com.example.personalfinanceapp.viewmodel.TransactionViewModel
 import java.util.Calendar
+import com.example.personalfinanceapp.utils.InsightsHelper
 
 class DashboardFragment : Fragment() {
 
@@ -38,6 +39,20 @@ class DashboardFragment : Fragment() {
         setupSeeAll()
         loadData()
     }
+
+    private fun showInsights(transactions: List<com.example.personalfinanceapp.data.model.Transaction>) {
+        val insights = InsightsHelper.generateInsights(transactions)
+        val insightViews = listOf(binding.tvInsight1, binding.tvInsight2, binding.tvInsight3)
+        insightViews.forEachIndexed { index, textView ->
+            if (index < insights.size) {
+                textView.text = insights[index]
+                textView.visibility = android.view.View.VISIBLE
+            } else {
+                textView.visibility = android.view.View.GONE
+            }
+        }
+    }
+
 
     private fun setupRecyclerView() {
         adapter = TransactionAdapter(
@@ -93,6 +108,7 @@ class DashboardFragment : Fragment() {
                 binding.tvEmpty.visibility = View.GONE
                 binding.rvTransactions.visibility = View.VISIBLE
                 adapter.submitList(transactions.take(10))
+                showInsights(transactions)
             }
         }
     }

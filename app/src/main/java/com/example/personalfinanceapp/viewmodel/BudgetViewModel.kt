@@ -10,6 +10,9 @@ import com.example.personalfinanceapp.data.model.Budget
 import com.example.personalfinanceapp.data.repository.FinanceRepository
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import android.content.Context
+import com.example.personalfinanceapp.utils.NotificationHelper
+
 
 class BudgetViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -66,12 +69,24 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     // Sync spent amounts from actual transactions into budgets
-    fun syncSpentAmounts(userId: Int, budgets: List<Budget>) {
+    // Replace syncSpentAmounts() with this version:
+    fun syncSpentAmounts(context: Context, userId: Int, budgets: List<Budget>) {
         viewModelScope.launch {
             budgets.forEach { budget ->
                 val spent = repository.getTotalSpentByCategory(userId, budget.category)
                 if (spent != budget.spentAmount) {
                     repository.updateBudget(budget.copy(spentAmount = spent))
+                }
+                // Check if notification needed
+                val percent = if (budget.limitAmount > 0) spent / budget.limitAmount else 0.0
+                when {
+                    percent > 1.0 -> NotificationHelper.sendOverBudgetAlert(
+                        context, budget.category, spent, budget.limitAmount
+                    )
+
+                    percent >= 0.8 -> NotificationHelper.sendNearLimitAlert(
+                        context, budget.category, spent, budget.limitAmount
+                    )
                 }
             }
         }

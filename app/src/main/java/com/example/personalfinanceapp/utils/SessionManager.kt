@@ -15,6 +15,8 @@ class SessionManager(context: Context) {
         private const val KEY_USER_EMAIL = "userEmail"
         private const val KEY_IS_LOGGED_IN = "isLoggedIn"
         private const val KEY_DARK_MODE = "darkMode"
+        private const val KEY_PIN = "userPin"
+        private const val KEY_PIN_ENABLED = "pinEnabled"
     }
 
     fun saveSession(userId: Int, userName: String, userEmail: String = "") {
@@ -32,29 +34,20 @@ class SessionManager(context: Context) {
     fun getUserName(): String = prefs.getString(KEY_USER_NAME, "") ?: ""
     fun getUserEmail(): String = prefs.getString(KEY_USER_EMAIL, "") ?: ""
 
-    // Dark mode
     fun setDarkMode(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_DARK_MODE, enabled).apply()
     }
     fun isDarkMode(): Boolean = prefs.getBoolean(KEY_DARK_MODE, false)
 
-    // ── PIN Lock ────────────────────────────────────────────────
-    private const val KEY_PIN = "userPin"
-    private const val KEY_PIN_ENABLED = "pinEnabled"
-
     fun setPin(pin: String) {
         prefs.edit().putString(KEY_PIN, pin).apply()
         prefs.edit().putBoolean(KEY_PIN_ENABLED, true).apply()
     }
-
     fun getPin(): String = prefs.getString(KEY_PIN, "") ?: ""
-
     fun isPinEnabled(): Boolean = prefs.getBoolean(KEY_PIN_ENABLED, false)
-
     fun clearPin() {
         prefs.edit().putBoolean(KEY_PIN_ENABLED, false).apply()
     }
-
 
     fun clearSession() {
         prefs.edit().clear().apply()

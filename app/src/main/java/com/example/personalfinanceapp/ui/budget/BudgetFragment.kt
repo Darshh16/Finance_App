@@ -56,7 +56,7 @@ class BudgetFragment : Fragment() {
     private fun loadBudgets() {
         val userId = sessionManager.getUserId()
         viewModel.getBudgetsForCurrentMonth(userId).observe(viewLifecycleOwner) { budgets ->
-            viewModel.syncSpentAmounts(userId, budgets)
+            viewModel.syncSpentAmounts(requireContext(), userId, budgets)
             if (budgets.isEmpty()) {
                 binding.layoutEmpty.visibility = View.VISIBLE
                 binding.rvBudgets.visibility = View.GONE

@@ -13,6 +13,7 @@ import com.example.personalfinanceapp.ui.transaction.AddTransactionActivity
 import com.example.personalfinanceapp.ui.transaction.TransactionsFragment
 import com.example.personalfinanceapp.utils.SessionManager
 import com.example.personalfinanceapp.ui.goals.GoalFragment
+import com.example.personalfinanceapp.utils.NotificationHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        NotificationHelper.createNotificationChannel(this)
 
         loadFragment(DashboardFragment())
         binding.bottomNavigation.selectedItemId = R.id.navigation_dashboard

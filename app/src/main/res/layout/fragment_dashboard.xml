@@ -193,6 +193,71 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Add this BEFORE the Recent Transactions header LinearLayout -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/bg_card"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="💡 Smart Insights"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/gold"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvInsight1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tvInsight2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tvInsight3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:paddingVertical="4dp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
         <!-- Recent Transactions header -->
         <LinearLayout
             android:layout_width="match_parent"
